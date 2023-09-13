@@ -16,7 +16,41 @@ namespace cSharp_BankSystemUsingSQLServer
         {
             httpClient = new HttpClient();
         }
+        public async Task ViewCurrencyConverter()
+        {
+            Console.WriteLine("Welcome to Currency Converter Service\n\n\r\n" +
+                "E.g:\n" +
+                "Currency Code  Currency Name\n" +
+                "OMR            Omani Rial\n" +
+                "AED            UAE Dirham\n" +
+                "USD            United States Dollar\n" +
+                "EUR            Euro\n");
+            Console.WriteLine("Enter the base currency: ");
+            string Base = Console.ReadLine();
+            Console.WriteLine("Enter the exchange currency: ");
+            string exchangeTo = Console.ReadLine();
 
+            CurrencyConverterData currencyConverter = await GetExCurrencyConverterAsync(Base, exchangeTo);
+
+            if (currencyConverter != null)
+            {
+                Console.WriteLine($"Base Currency: {currencyConverter.base_code}");
+                Console.WriteLine($"Target Currency: {currencyConverter.target_code}");
+                Console.WriteLine("Exchange Rates:");
+                foreach (var conversion_rate in currencyConverter.conversion_rate)
+                {
+                    Console.Write($"{currencyConverter.conversion_rate}");
+                }
+                Console.WriteLine("\n\n\n\n\n\nPress any key to go back.....");
+                Console.ReadLine();
+                Console.Clear();
+                return;
+                //Console.Write($"Enter the amount to convert into {currencyConverter.target_code}: ");
+                //decimal C = Convert.ToDecimal(Console.ReadLine());
+                //decimal.TryParse(currencyConverter.conversion_rate);
+                //decimal A = C * currencyConverter.conversion_rate;
+            }
+        }
         public async Task<CurrencyConverterData> GetExCurrencyConverterAsync(string Base, string exchangeTo)
         {
             string CurrencyConverterApiUrl = $"https://v6.exchangerate-api.com/v6/2d8754c1bf6d68b8bbea954d/pair/{Base}/{exchangeTo}";
@@ -43,6 +77,7 @@ namespace cSharp_BankSystemUsingSQLServer
                 return null;
             }
         }
+        
 
     }
 

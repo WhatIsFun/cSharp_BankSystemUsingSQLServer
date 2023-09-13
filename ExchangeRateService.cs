@@ -11,13 +11,32 @@ namespace cSharp_BankSystemUsingSQLServer
     {
         private readonly HttpClient httpClient;
         private const string ExchangeRateApiUrl = "https://v6.exchangerate-api.com/v6/2d8754c1bf6d68b8bbea954d/latest/OMR";
-
+        DateTime DateTime = DateTime.Now;
         public ExchangeRateService()
         {
             httpClient = new HttpClient();
         }
 
-        public async Task<ExchangeRateData> GetExchangeRatesAsync()
+        public async Task ViewExchangeRates()
+        {
+            Console.WriteLine("Exchange Rates:\n");
+            Console.WriteLine(DateTime);
+            ExchangeRateData exchangeRates = await GetExchangeRatesAsync();
+
+            if (exchangeRates != null)
+            {
+                Console.WriteLine($"\n\nBase Currency: {exchangeRates.base_code}\n");
+                foreach (var conversion_rates in exchangeRates.conversion_rates)
+                {
+                    Console.WriteLine($"{conversion_rates.Key}: {conversion_rates.Value}");
+                }
+            }
+            Console.WriteLine("\n\n\n\n\n\nPress any key to go back.....");
+            Console.ReadLine();
+            Console.Clear();
+            return;
+        }
+            private async Task<ExchangeRateData> GetExchangeRatesAsync()
         {
             try
             {

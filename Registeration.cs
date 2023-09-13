@@ -12,7 +12,7 @@ namespace cSharp_BankSystemUsingSQLServer
     {
         public void Register() 
         {
-            Console.Clear();
+            //Console.Clear();
             Console.WriteLine(">> Registeration <<\n\n");
             Console.Write("Enter your name: ");
             string name = Console.ReadLine();
@@ -23,7 +23,6 @@ namespace cSharp_BankSystemUsingSQLServer
 
             if (!IsValidEmail(email))
             {
-
                 Console.WriteLine("Invalid email address.");
                 return;
             }
@@ -38,6 +37,10 @@ namespace cSharp_BankSystemUsingSQLServer
             InsertUserRegistrationData(name, email, password);
 
             Console.WriteLine("User registration successful.");
+            Console.WriteLine("\n\n\n\n\n\nPress any key to go.....");
+            Console.ReadLine();
+            // >>>>>>>>>>>>>>>>Go to profile page<<<<<<<<<<<<<<
+            //Console.Clear();
         }
 
         // Regex pattern for email validation
@@ -50,20 +53,21 @@ namespace cSharp_BankSystemUsingSQLServer
         // Custom rules for password validation
         private static bool IsValidPassword(string password)
         {
-            string pattern = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$";
+            string pattern = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{8,}$";
             Regex regex = new Regex(pattern);
+            HashPassword(password);
             return regex.IsMatch(password); // Return true if password meets your requirements
         }
 
         // Insert user registration data into the database
         private static void InsertUserRegistrationData(string name, string email, string password)
         {
-            string connectionString = "Data Source=(local);Initial Catalog=ITI; Integrated Security=true";
+            string connectionString = "Data Source=(local);Initial Catalog=BankSystem; Integrated Security=true";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                string insertSql = "INSERT INTO Users (Name, Email, Password) VALUES (@Name, @Email, @Password)";
+                string insertSql = "INSERT INTO Users (user_Name, Email, Password) VALUES (@Name, @Email, @Password)";
                 using (SqlCommand command = new SqlCommand(insertSql, connection))
                 {
                     command.Parameters.AddWithValue("@Name", name);
@@ -73,6 +77,11 @@ namespace cSharp_BankSystemUsingSQLServer
                     command.ExecuteNonQuery();
                 }
             }
+        }
+        private static string HashPassword(string password)
+        {
+            // Use BCrypt to hash the password
+            return BCrypt.Net.BCrypt.HashPassword(password);
         }
     }
 }

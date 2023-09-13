@@ -9,9 +9,12 @@ namespace cSharp_BankSystemUsingSQLServer
 {
     public class HomePage
     {
+        Registeration registeration = new Registeration();
+        LoginPage loginPage = new LoginPage();
+        ExchangeRateService exchangeRateService = new ExchangeRateService();
+        CurrencyConverter currencyConverter = new CurrencyConverter();
         public void mainMenu()
         {
-            //Console.Clear();
             while (true)
             {
                 Console.WriteLine("1. Register");
@@ -25,44 +28,16 @@ namespace cSharp_BankSystemUsingSQLServer
                 switch (choice)
                 {
                     case "1":
-                        Console.Write("Enter your name: ");
-                        string name = Console.ReadLine();
-                        Console.Write("Enter your email: ");
-                        string email = Console.ReadLine();
-                        Console.Write("Enter your password: ");
-                        string password = Console.ReadLine();
-
-                        if (bankSystem.RegisterUser(name, email, password))
-                        {
-                            Console.WriteLine("Registration successful.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Registration failed. User with this email already exists.");
-                        }
+                        registeration.Register();
                         break;
-
                     case "2":
-                        Console.Write("Enter your email: ");
-                        string loginEmail = Console.ReadLine();
-                        Console.Write("Enter your password: ");
-                        string loginPassword = Console.ReadLine();
-
-                        if (bankSystem.Login(loginEmail, loginPassword))
-                        {
-                            Console.WriteLine("Login successful.");
-                            bankSystem.HandleLoggedInUser();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Login failed. Invalid email or password.");
-                        }
+                        loginPage.Login();
                         break;
                      case "3":
-
+                        exchangeRateService.ViewExchangeRates();
                         break; 
                     case "4":
-
+                        currencyConverter.ViewCurrencyConverter();
                         break;
                     case "5":
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -72,7 +47,7 @@ namespace cSharp_BankSystemUsingSQLServer
                         Console.ResetColor();
                         if (ExitInput.Equals("y", StringComparison.OrdinalIgnoreCase))
                         {
-                            Console.Write("Thank You");
+                            Console.Write("Thank You for using our services");
                             Environment.Exit(0);
                         }
                         else
@@ -85,8 +60,8 @@ namespace cSharp_BankSystemUsingSQLServer
                         Console.WriteLine("Invalid option. Please try again.");
                         break;
                 }
+                Console.Clear();
             }
         }
-        public void 
     }
 }
