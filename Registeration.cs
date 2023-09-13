@@ -63,20 +63,29 @@ namespace cSharp_BankSystemUsingSQLServer
         private static void InsertUserRegistrationData(string name, string email, string password)
         {
             string connectionString = "Data Source=(local);Initial Catalog=BankSystem; Integrated Security=true";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
-
-                string insertSql = "INSERT INTO Users (user_Name, Email, Password) VALUES (@Name, @Email, @Password)";
-                using (SqlCommand command = new SqlCommand(insertSql, connection))
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    command.Parameters.AddWithValue("@Name", name);
-                    command.Parameters.AddWithValue("@Email", email);
-                    command.Parameters.AddWithValue("@Password", password);
+                    connection.Open();
 
-                    command.ExecuteNonQuery();
+                    string insertSql = "INSERT INTO Users (user_Name, Email, Password) VALUES (@Name, @Email, @Password)";
+                    using (SqlCommand command = new SqlCommand(insertSql, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", name);
+                        command.Parameters.AddWithValue("@Email", email);
+                        command.Parameters.AddWithValue("@Password", password);
+
+                        command.ExecuteNonQuery();
+
+                    }
                 }
             }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
         }
         private static string HashPassword(string password)
         {
