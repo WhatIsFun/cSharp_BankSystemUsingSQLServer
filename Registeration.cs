@@ -34,28 +34,29 @@ namespace cSharp_BankSystemUsingSQLServer
             }
 
             // If email and password are valid, insert data into the database
-            InsertUserRegistrationData(name, email, password);
+            string hashedPassword = HashPassword(password); //hashing the password 
+            InsertUserRegistrationData(name, email, hashedPassword);
 
             Console.WriteLine("User registration successful.");
             Console.WriteLine("\n\n\n\n\n\nPress any key to go.....");
             Console.ReadLine();
-            // >>>>>>>>>>>>>>>>Go to profile page<<<<<<<<<<<<<<
+            // >>>>>>>>>>>>>>>>Go to profile page<<<<<<<<<<<<<< // Next patch
             //Console.Clear();
         }
 
         // Regex pattern for email validation
         private static bool IsValidEmail(string email)
         {
-            string pattern = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$";
+            string pattern = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$"; //Regular expression for email validation
             return Regex.IsMatch(email, pattern);
         }
 
         // Custom rules for password validation
         private static bool IsValidPassword(string password)
         {
-            string pattern = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{8,}$";
+            string pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"; //Uppercase and Lowercase Letters, Digits, and Special Characters (Minimum Length 8):
+
             Regex regex = new Regex(pattern);
-            HashPassword(password);
             return regex.IsMatch(password); // Return true if password meets your requirements
         }
 
@@ -89,7 +90,7 @@ namespace cSharp_BankSystemUsingSQLServer
         }
         private static string HashPassword(string password)
         {
-            // Use BCrypt to hash the password
+            // BCrypt to hash the password
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
     }

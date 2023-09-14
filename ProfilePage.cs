@@ -23,15 +23,27 @@ namespace cSharp_BankSystemUsingSQLServer
                 Console.WriteLine("Your Accounts:");
                 foreach (var account in userAccounts)
                 {
-                    Console.WriteLine($"Account Number: {account.AccountNumber}");
-                    Console.WriteLine($"Account Holder Name: {account.AccountHolderName}");
+                    Console.WriteLine($"Account Number: {account.AccountId}");
+                    Console.WriteLine($"Account Holder Name: {user.Name}");
                     Console.WriteLine($"Account Balance: {account.Balance} OMR");
                     Console.WriteLine("____________________________________");
                     Console.WriteLine();
                 }
             }
-            else { Console.WriteLine("You dont have any accounts. Please add one"); }
-            
+            else { Console.WriteLine("You dont have any accounts. Please add one\n\n"); }
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("1) Create new account\n2) Manage my accounts");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("\n$ $$ Operations $$ $\n");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("3) Deposite\n4) Withdraw\n5) Transfer Money\n6) Account history");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("7) Logout");
+            Console.ResetColor();
+
         }
 
 
@@ -44,7 +56,7 @@ namespace cSharp_BankSystemUsingSQLServer
                 connection.Open();
 
                 // Query the database to retrieve accounts for the user
-                string selectSql = "SELECT * FROM Account WHERE UserId = @UserId";
+                string selectSql = "SELECT * FROM Account WHERE user_ID = @UserId";
                 using (SqlCommand command = new SqlCommand(selectSql, connection))
                 {
                     command.Parameters.AddWithValue("@UserId", userId);
@@ -55,8 +67,7 @@ namespace cSharp_BankSystemUsingSQLServer
                         {
                             userAccounts.Add(new Account
                             {
-                                AccountNumber = Convert.ToInt32(reader["AccountNumber"]),
-                                AccountHolderName = reader["AccountHolderName"].ToString(),
+                                AccountId = Convert.ToInt32(reader["Account_Id"]),
                                 Balance = Convert.ToDecimal(reader["Balance"])
                             });
                         }

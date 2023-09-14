@@ -29,9 +29,10 @@ namespace cSharp_BankSystemUsingSQLServer
             {
                 // User is authenticated; grant access to the program
                 Console.WriteLine("Login successful! Welcome, " + authenticatedUser.Name);
-                // Implement program functionality here
-
+                loading();
                 Console.Clear();
+                ProfilePage profilePage = new ProfilePage();
+                profilePage.profile();
             }
             else
             {
@@ -63,12 +64,16 @@ namespace cSharp_BankSystemUsingSQLServer
                                 // Password is correct; return the user object
                                 return new User
                                 {
-                                    UserId = Convert.ToInt32(reader["UserId"]),
-                                    Name = reader["Name"].ToString(),
+                                    UserId = Convert.ToInt32(reader["user_ID"]),
+                                    Name = reader["user_Name"].ToString(),
                                     Email = reader["Email"].ToString(),
-                                    // Other user properties if needed
                                 };
-                            }
+                                
+                            }reader.Close();
+                        }
+                        else
+                        {
+                            Console.WriteLine("No data retrieved");
                         }
                     }
                 }
@@ -82,6 +87,18 @@ namespace cSharp_BankSystemUsingSQLServer
         private static bool VerifyPassword(string inputPassword, string hashedPassword)
         {
             return BCrypt.Net.BCrypt.Verify(inputPassword, hashedPassword);
+        }
+        public void loading()
+        {
+            string[] spinner = { "-", "\\", "|", "/" };
+
+            Console.Write("Loading ");
+            for (int i = 0; i < 10; i++)
+            {
+                Console.Write(spinner[i % spinner.Length]);
+                Thread.Sleep(200);
+                Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+            }
         }
     }
 

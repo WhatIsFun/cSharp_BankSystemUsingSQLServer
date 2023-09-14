@@ -8,7 +8,7 @@ namespace cSharp_BankSystemUsingSQLServer
 {
     public class Account
     {
-        public int AccountNumber { get; set; }
+        public int AccountId { get; set; }
         public string AccountHolderName { get; set; }
         public decimal Balance { get; set; }
     }
