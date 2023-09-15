@@ -32,7 +32,7 @@ namespace cSharp_BankSystemUsingSQLServer
                 loading();
                 Console.Clear();
                 ProfilePage profilePage = new ProfilePage();
-                profilePage.profile();
+                profilePage.profileMenu();
             }
             else
             {
@@ -66,7 +66,7 @@ namespace cSharp_BankSystemUsingSQLServer
                                 {
                                     UserId = Convert.ToInt32(reader["user_ID"]),
                                     Name = reader["user_Name"].ToString(),
-                                    Email = reader["Email"].ToString(),
+                                    Email = reader["Email"].ToString()
                                 };
                                 
                             }reader.Close();
@@ -108,7 +108,6 @@ namespace cSharp_BankSystemUsingSQLServer
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        // Other user properties if needed
     }
 
 }

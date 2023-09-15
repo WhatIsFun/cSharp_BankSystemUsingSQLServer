@@ -33,8 +33,9 @@ namespace cSharp_BankSystemUsingSQLServer
                 return;
             }
 
-            // If email and password are valid, insert data into the database
             string hashedPassword = HashPassword(password); //hashing the password 
+
+            // If email and password are valid, insert data into the database
             InsertUserRegistrationData(name, email, hashedPassword);
 
             Console.WriteLine("User registration successful.");
@@ -44,14 +45,12 @@ namespace cSharp_BankSystemUsingSQLServer
             //Console.Clear();
         }
 
-        // Regex pattern for email validation
         private static bool IsValidEmail(string email)
         {
             string pattern = @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$"; //Regular expression for email validation
             return Regex.IsMatch(email, pattern);
         }
 
-        // Custom rules for password validation
         private static bool IsValidPassword(string password)
         {
             string pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"; //Uppercase and Lowercase Letters, Digits, and Special Characters (Minimum Length 8):
