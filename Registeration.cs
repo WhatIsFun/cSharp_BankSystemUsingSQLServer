@@ -10,9 +10,9 @@ namespace cSharp_BankSystemUsingSQLServer
 {
     internal class Registeration
     {
+        LoginPage loginPage = new LoginPage();
         public void Register() 
         {
-            //Console.Clear();
             Console.WriteLine(">> Registeration <<\n\n");
             Console.Write("Enter your name: ");
             string name = Console.ReadLine();
@@ -41,8 +41,9 @@ namespace cSharp_BankSystemUsingSQLServer
             Console.WriteLine("User registration successful.");
             Console.WriteLine("\n\n\n\n\n\nPress any key to go.....");
             Console.ReadLine();
-            // >>>>>>>>>>>>>>>>Go to profile page<<<<<<<<<<<<<< // Next patch
-            //Console.Clear();
+            Console.Clear();
+            // >>>>>>>>>>>>>>>>Go to profile page<<<<<<<<<<<<<<
+            loginPage.Login();
         }
 
         private static bool IsValidEmail(string email)

@@ -9,8 +9,9 @@ namespace cSharp_BankSystemUsingSQLServer
 { 
     public class Transaction
     {
-        User user = new User();
-        ProfilePage profilePage = new ProfilePage();
+        //LoginPage loginPage = new LoginPage();
+        //User authenticatedUser = new User();
+        //ProfilePage profilePage = new ProfilePage();
         public int TransactionId { get; set; }
         public DateTime Timestamp { get; set; }
         public TransactionType Type { get; set; }
@@ -19,15 +20,6 @@ namespace cSharp_BankSystemUsingSQLServer
         public int TargetAccountNumber { get; set; }
         private static string connectionString = "Data Source=(local);Initial Catalog=BankSystem; Integrated Security=true";
 
-        //public Transaction(TransactionType transactionType, decimal amount, int sourceAccountNumber, int targetAccountNumber)
-        //{
-        //    Type = transactionType;
-        //    Amount = amount;
-        //    Timestamp = DateTime.Now;
-        //    SourceAccountNumber = sourceAccountNumber;
-        //    TargetAccountNumber = targetAccountNumber;
-
-        //}
 
         public void transactionMenu()
         {
@@ -54,7 +46,8 @@ namespace cSharp_BankSystemUsingSQLServer
                         transfer();
                         break;
                     case "4":
-                        profilePage.profileMenu();
+                        Console.Clear();
+                        //profilePage.profileMenu();
                         break;
                     default:
                         Console.WriteLine("Invalid option. Please try again.");
@@ -134,30 +127,7 @@ namespace cSharp_BankSystemUsingSQLServer
         //        }
         //    }
         //}
-        private decimal GetAccountBalance(int accountId, SqlConnection connection, SqlTransaction transaction)
-        {
-            // Implement code to retrieve the account balance from the database
-            decimal currentBalance = 0; // Replace with actual retrieval logic
-            return currentBalance;
-        }
-
-        private void UpdateAccountBalance(int accountId, decimal newBalance, SqlConnection connection, SqlTransaction transaction)
-        {
-            // Implement code to update the account balance in the database
-            // You should use a SQL UPDATE statement here
-        }
-
-        private void LogTransaction(SqlConnection connection, SqlTransaction transaction)
-        {
-            
-        }
-
-        private int GetTargetAccountId()
-        {
-            // Implement a method to get the target account ID (for transfers)
-            // This can be user input or fetched from your application logic
-            return 2; // Replace with actual target account ID
-        }
+        
     }
     public enum TransactionType
     {

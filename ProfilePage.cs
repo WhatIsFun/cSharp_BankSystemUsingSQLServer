@@ -5,50 +5,60 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using cSharp_BankSystemUsingSQLServer;
 
 namespace cSharp_BankSystemUsingSQLServer
 {
     internal class ProfilePage
     {
-        Transaction transaction = new Transaction();
-        User user = new User();
+        //Transaction transaction = new Transaction();
+        //LoginPage loginPage = new LoginPage();
+        HomePage homePage = new HomePage();
         private static string connectionString = "Data Source=(local);Initial Catalog=BankSystem; Integrated Security=true";
+        //Account userAccounts;
+        public List<Account> userAccounts = new List<Account>();
 
-        public void profileMenu()
+        public void profileMenu(User authenticatedUser)
         {
-            Console.WriteLine($"Welcome, {user.Name}\n\n");
-
-            List<Account> userAccounts = GetUserAccounts(user.UserId);
-            if ( userAccounts != null )
+            
+            if (authenticatedUser != null)
             {
-                Console.WriteLine("Your Accounts:");
-                foreach (var account in userAccounts)
+                Console.WriteLine($"Welcome, {authenticatedUser.Name}\n\n");
+
+                userAccounts = GetUserAccounts(authenticatedUser.UserId);
+                if (userAccounts != null)
                 {
-                    Console.WriteLine($"Account Number: {account.AccountId}");
-                    Console.WriteLine($"Account Holder Name: {user.Name}");
-                    Console.WriteLine($"Account Balance: {account.Balance} OMR");
-                    Console.WriteLine("____________________________________");
-                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("Your Accounts:");
+                    Console.ResetColor();
+                    foreach (var account in userAccounts)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine($"Account Number: {account.AccountId}");
+                        Console.WriteLine($"Account Holder Name: {authenticatedUser.Name}");
+                        Console.WriteLine($"Account Balance: {account.Balance} OMR");
+                        Console.ResetColor();
+                        Console.WriteLine("____________________________________");
+                        Console.WriteLine();
+                    }
                 }
+                else { Console.WriteLine("You dont have any accounts. Please add one\n\n"); }
             }
-            else { Console.WriteLine("You dont have any accounts. Please add one\n\n"); }
-            
-            //Console.ForegroundColor = ConsoleColor.Blue;
-            //Console.WriteLine("\n$ $$ Operations $$ $\n");
-            //Console.ResetColor();
-            //Console.ForegroundColor = ConsoleColor.Cyan;
-            //Console.WriteLine("3) Deposite\n4) Withdraw\n5) Transfer Money\n6) Account history");
-            //Console.ResetColor();
-            
+            else
+            {
+                Console.WriteLine("Login failed");
+                homePage.mainMenu();
+            }
+
 
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("1) Create new account\n2) Make a transaction\n3) Account history4) Delete account\n5) Delete User\n6) Logout");
+                Console.WriteLine("1) Create new account\n2) Make a transaction\n3) View Transaction History\n4) Delete account\n5) Delete User\n");
                 Console.ResetColor();
 
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("7) Logout");
+                Console.WriteLine("6) Logout");
                 Console.ResetColor();
                 Console.Write("\n\nSelect an option: ");
                 string choice = Console.ReadLine();
@@ -56,40 +66,46 @@ namespace cSharp_BankSystemUsingSQLServer
                 switch (choice)
                 {
                     case "1":
-                        createAccount();
+                        Console.Clear();
+                        createAccount(authenticatedUser);
                         break;
                     case "2":
-                        transaction.transactionMenu();
+                        Console.Clear();
+                        //transaction.transactionMenu();
                         break;
                     //case "3":
                     //    ();
                     //    break;
-                    //case "4":
-                    //    ();
-                    //    break;
+                    case "4":
+                        Console.Clear();
+                        deleteAccount(authenticatedUser);
+                        break;
                     //case "5":
                     //    ();
                     //    break;
-                    //case "6":
-                    //    ();
-                    //    break;
+                    case "6":
+                        Console.Clear();
+                        homePage.mainMenu();
+                        break;
                     default:
                         Console.WriteLine("Invalid option. Please try again.");
                         break;
                 }
-                Console.Clear();
+                //Console.Clear();
             }
         }
-        private void createAccount()
+        private void createAccount(User authenticatedUser)
         {
             Console.Write("Enter initial balance: ");
             if (decimal.TryParse(Console.ReadLine(), out decimal initialBalance))
             {
                 decimal balance = initialBalance;
-                int UserID = user.UserId;
-                string AccountHolderName = user.Name;
+                int UserID = authenticatedUser.UserId;
+                string AccountHolderName = authenticatedUser.Name;
                 insertAccount(balance, UserID, AccountHolderName);
-                return;
+                Console.WriteLine("\n\n\n\n\n\nPress any key to go back.....");
+                Console.ReadLine();
+                profileMenu(authenticatedUser);                
             }
             else
             {
@@ -128,8 +144,7 @@ namespace cSharp_BankSystemUsingSQLServer
 
         private static List<Account> GetUserAccounts(int userId)
         {
-            List<Account> userAccounts = new List<Account>();
-
+            List<Account> accounts = new List<Account>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -144,7 +159,7 @@ namespace cSharp_BankSystemUsingSQLServer
                     {
                         while (reader.Read())
                         {
-                            userAccounts.Add(new Account
+                            accounts.Add(new Account
                             {
                                 AccountId = Convert.ToInt32(reader["Account_Id"]),
                                 Balance = Convert.ToDecimal(reader["Balance"]),
@@ -156,8 +171,130 @@ namespace cSharp_BankSystemUsingSQLServer
                 connection.Close();
             }
 
-            return userAccounts;
+            return accounts;
         }
+
+        private void deleteAccount(User authenticatedUser)
+        {
+            Console.Clear();
+            Console.WriteLine("Delete Account");
+            Console.Write("Enter the account ID to delete: ");
+            int accountIdToDelete;
+            if (!int.TryParse(Console.ReadLine(), out accountIdToDelete))
+            {
+                Console.WriteLine("Invalid account ID. Account deletion failed.");
+                Console.WriteLine("Press Enter to go back ...");
+                Console.ReadLine();
+                return;
+            }
+            // Check if the provided account ID exists in the user's accounts
+            if (userAccounts != null)
+            {
+
+                foreach (var account in userAccounts)
+                {
+                    if (userAccounts.Any(account => account.AccountId == accountIdToDelete))
+                    {
+                        // Verify the provided email and password against the authenticated user's credentials
+                        Console.Write("Enter your password to confirm deletion: ");
+                        string passwordInput = Console.ReadLine();
+
+                        if (VerifyPassword(passwordInput, authenticatedUser.Password))
+                        {
+                            deleteAccountServer(accountIdToDelete);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid password. Account deletion failed.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Account with the specified ID does not exist in your accounts. Account deletion failed.");
+                    }
+
+                    Console.WriteLine("Press Enter to go back...");
+                    Console.ReadLine();
+                    Console.Clear();
+                    profileMenu(authenticatedUser);
+                }
+            }
+        }
+        private void deleteAccountServer(int accountIdToDelete)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // delete the account from the accounts table
+                    string deletesql = "delete from Account where Account_Id = @accountid";
+                    using (SqlCommand deletecommand = new SqlCommand(deletesql, connection))
+                    {
+                        deletecommand.Parameters.AddWithValue("@accountid", accountIdToDelete);
+                        deletecommand.ExecuteNonQuery();
+                    }
+
+                    Console.WriteLine($"account with id {accountIdToDelete} deleted successfully. Visit nearest ATM to withdraw your balance");
+
+                }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+        }
+
+        private void deleteUser(User authenticatedUser)
+        {
+            Console.WriteLine("Delete User\n\nSoryy to hear that");
+            int userToDelete = authenticatedUser.UserId;
+            if (authenticatedUser != null)
+            {
+                Console.Write("Enter your password to confirm deletion: ");
+                string passwordInput = Console.ReadLine();
+
+                if (VerifyPassword(passwordInput, authenticatedUser.Password))
+                {
+                    deleteUserServer(userToDelete);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid password. Account deletion failed.");
+                }
+            }
+            Console.WriteLine("Press Enter to go back...");
+            Console.ReadLine();
+            Console.Clear();
+            profileMenu(authenticatedUser);
+
+
+        }
+        private void deleteUserServer(int userToDelete)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // delete the account from the accounts table
+                    string deletesql = "delete from Users where User_ID = @userId";
+                    using (SqlCommand deletecommand = new SqlCommand(deletesql, connection))
+                    {
+                        deletecommand.Parameters.AddWithValue("@userId", userToDelete);
+                        deletecommand.ExecuteNonQuery();
+                    }
+
+                    Console.WriteLine($"account with id {userToDelete} deleted successfully.");
+
+                }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+        }
+        private static bool VerifyPassword(string inputPassword, string hashedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(inputPassword, hashedPassword);
+        }
+
 
     }
 }

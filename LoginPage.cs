@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
 
-
 namespace cSharp_BankSystemUsingSQLServer
 {
     internal class LoginPage
     {
+        //ProfilePage profilePage = new ProfilePage();
         private static string connectionString = "Data Source=(local);Initial Catalog=BankSystem; Integrated Security=true";
 
         public void Login()
@@ -32,7 +32,7 @@ namespace cSharp_BankSystemUsingSQLServer
                 loading();
                 Console.Clear();
                 ProfilePage profilePage = new ProfilePage();
-                profilePage.profileMenu();
+                profilePage.profileMenu(authenticatedUser);
             }
             else
             {
@@ -62,14 +62,16 @@ namespace cSharp_BankSystemUsingSQLServer
                             if (VerifyPassword(password, storedPassword))
                             {
                                 // Password is correct; return the user object
-                                return new User
+                                return new User()
                                 {
                                     UserId = Convert.ToInt32(reader["user_ID"]),
                                     Name = reader["user_Name"].ToString(),
-                                    Email = reader["Email"].ToString()
+                                    Email = reader["Email"].ToString(),
+                                    Password = reader["Password"].ToString()
+
                                 };
                                 
-                            }reader.Close();
+                            }//reader.Close();
                         }
                         else
                         {
@@ -102,13 +104,19 @@ namespace cSharp_BankSystemUsingSQLServer
         }
     }
 
-    class User
+    public class User
     {
         public int UserId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public List<Account> Accounts { get; set; }
+        public User()
+        {
+            Accounts = new List<Account>();
+        }
     }
+
 
 }
 
