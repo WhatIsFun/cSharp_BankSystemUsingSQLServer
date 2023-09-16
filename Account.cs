@@ -16,6 +16,13 @@ namespace cSharp_BankSystemUsingSQLServer
         {
             transactions = new List<Transaction>();
         }
+        public Account(int accountId, string accountHolderName, decimal balance)
+        {
+            AccountId = accountId;
+            AccountHolderName = accountHolderName;
+            Balance = balance;
+            transactions = new List<Transaction>();
+        }
     }
     
 

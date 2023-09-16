@@ -19,6 +19,8 @@ namespace cSharp_BankSystemUsingSQLServer
 
         public async Task ViewExchangeRates()
         {
+            HomePage homePage = new HomePage();
+
             Console.WriteLine("Exchange Rates:\n");
             Console.WriteLine(DateTime);
             ExchangeRateData exchangeRates = await GetExchangeRatesAsync();
@@ -34,7 +36,7 @@ namespace cSharp_BankSystemUsingSQLServer
             Console.WriteLine("\n\n\n\n\n\nPress any key to go back.....");
             Console.ReadLine();
             Console.Clear();
-            return;
+            homePage.mainMenu();
         }
             private async Task<ExchangeRateData> GetExchangeRatesAsync()
         {

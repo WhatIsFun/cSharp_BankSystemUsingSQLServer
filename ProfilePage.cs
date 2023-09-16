@@ -11,16 +11,14 @@ namespace cSharp_BankSystemUsingSQLServer
 {
     internal class ProfilePage
     {
-        //Transaction transaction = new Transaction();
-        //LoginPage loginPage = new LoginPage();
-        HomePage homePage = new HomePage();
+        
         private static string connectionString = "Data Source=(local);Initial Catalog=BankSystem; Integrated Security=true";
-        //Account userAccounts;
         public List<Account> userAccounts = new List<Account>();
 
-        public void profileMenu(User authenticatedUser)
+        public void profileMenu(User authenticatedUser, List<Account> userAccounts)
         {
-            
+            Transaction transaction = new Transaction();
+            HomePage homePage = new HomePage();
             if (authenticatedUser != null)
             {
                 Console.WriteLine($"Welcome, {authenticatedUser.Name}\n\n");
@@ -31,6 +29,7 @@ namespace cSharp_BankSystemUsingSQLServer
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.WriteLine("Your Accounts:");
                     Console.ResetColor();
+
                     foreach (var account in userAccounts)
                     {
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -71,18 +70,19 @@ namespace cSharp_BankSystemUsingSQLServer
                         break;
                     case "2":
                         Console.Clear();
-                        //transaction.transactionMenu();
+                        transaction.transactionMenu(userAccounts, authenticatedUser);
                         break;
-                    //case "3":
-                    //    ();
-                    //    break;
+                    case "3":
+                        transaction.history(userAccounts, authenticatedUser);
+                        break;
                     case "4":
                         Console.Clear();
-                        deleteAccount(authenticatedUser);
+                        deleteAccount(authenticatedUser, userAccounts);
                         break;
-                    //case "5":
-                    //    ();
-                    //    break;
+                    case "5":
+                        Console.Clear();
+                        deleteUser(authenticatedUser);
+                        break;
                     case "6":
                         Console.Clear();
                         homePage.mainMenu();
@@ -105,7 +105,7 @@ namespace cSharp_BankSystemUsingSQLServer
                 insertAccount(balance, UserID, AccountHolderName);
                 Console.WriteLine("\n\n\n\n\n\nPress any key to go back.....");
                 Console.ReadLine();
-                profileMenu(authenticatedUser);                
+                profileMenu(authenticatedUser, userAccounts);                
             }
             else
             {
@@ -174,11 +174,11 @@ namespace cSharp_BankSystemUsingSQLServer
             return accounts;
         }
 
-        private void deleteAccount(User authenticatedUser)
+        private void deleteAccount(User authenticatedUser, List<Account> userAccounts)
         {
             Console.Clear();
             Console.WriteLine("Delete Account");
-            Console.Write("Enter the account ID to delete: ");
+            Console.Write("Enter the account number to delete: ");
             int accountIdToDelete;
             if (!int.TryParse(Console.ReadLine(), out accountIdToDelete))
             {
@@ -216,7 +216,7 @@ namespace cSharp_BankSystemUsingSQLServer
                     Console.WriteLine("Press Enter to go back...");
                     Console.ReadLine();
                     Console.Clear();
-                    profileMenu(authenticatedUser);
+                    profileMenu(authenticatedUser, userAccounts);
                 }
             }
         }
@@ -236,7 +236,7 @@ namespace cSharp_BankSystemUsingSQLServer
                         deletecommand.ExecuteNonQuery();
                     }
 
-                    Console.WriteLine($"account with id {accountIdToDelete} deleted successfully. Visit nearest ATM to withdraw your balance");
+                    Console.WriteLine($"account with id {accountIdToDelete} deleted successfully.\nVisit nearest ATM to withdraw your balance");
 
                 }
             }
@@ -264,7 +264,7 @@ namespace cSharp_BankSystemUsingSQLServer
             Console.WriteLine("Press Enter to go back...");
             Console.ReadLine();
             Console.Clear();
-            profileMenu(authenticatedUser);
+            profileMenu(authenticatedUser, userAccounts);
 
 
         }

@@ -18,6 +18,8 @@ namespace cSharp_BankSystemUsingSQLServer
         }
         public async Task ViewCurrencyConverter()
         {
+            HomePage homePage = new HomePage();
+
             Console.WriteLine("Welcome to Currency Converter Service\n\n\r\n" +
                 "E.g:\n" +
                 "Currency Code  Currency Name\n" +
@@ -44,11 +46,7 @@ namespace cSharp_BankSystemUsingSQLServer
                 Console.WriteLine("\n\n\n\n\n\nPress any key to go back.....");
                 Console.ReadLine();
                 Console.Clear();
-                return;
-                //Console.Write($"Enter the amount to convert into {currencyConverter.target_code}: ");
-                //decimal C = Convert.ToDecimal(Console.ReadLine());
-                //decimal.TryParse(currencyConverter.conversion_rate);
-                //decimal A = C * currencyConverter.conversion_rate;
+                homePage.mainMenu();
             }
         }
         public async Task<CurrencyConverterData> GetExCurrencyConverterAsync(string Base, string exchangeTo)
@@ -77,8 +75,6 @@ namespace cSharp_BankSystemUsingSQLServer
                 return null;
             }
         }
-        
-
     }
 
     public class CurrencyConverterData

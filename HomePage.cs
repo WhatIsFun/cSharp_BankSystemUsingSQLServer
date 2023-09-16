@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,12 +10,19 @@ namespace cSharp_BankSystemUsingSQLServer
 {
     public class HomePage
     {
-        Registeration registeration = new Registeration();
-        LoginPage loginPage = new LoginPage();
-        ExchangeRateService exchangeRateService = new ExchangeRateService();
-        CurrencyConverter currencyConverter = new CurrencyConverter();
+        private List<Account> userAccounts;
+        public HomePage(List<Account> userAccounts)
+        {
+            this.userAccounts = userAccounts;
+        }
+        public HomePage() { }
         public void mainMenu()
         {
+            Registeration registeration = new Registeration();
+            LoginPage loginPage = new LoginPage();
+            ExchangeRateService exchangeRateService = new ExchangeRateService();
+            CurrencyConverter currencyConverter = new CurrencyConverter();
+ 
             while (true)
             {
                 Console.WriteLine("1. Register");
@@ -31,7 +39,7 @@ namespace cSharp_BankSystemUsingSQLServer
                         registeration.Register();
                         break;
                     case "2":
-                        loginPage.Login();
+                        loginPage.Login(userAccounts);
                         break;
                      case "3":
                         exchangeRateService.ViewExchangeRates();

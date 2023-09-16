@@ -10,9 +10,12 @@ namespace cSharp_BankSystemUsingSQLServer
 {
     internal class Registeration
     {
-        LoginPage loginPage = new LoginPage();
+        
         public void Register() 
         {
+            HomePage homePage = new HomePage();
+
+            Console.Clear();
             Console.WriteLine(">> Registeration <<\n\n");
             Console.Write("Enter your name: ");
             string name = Console.ReadLine();
@@ -42,8 +45,8 @@ namespace cSharp_BankSystemUsingSQLServer
             Console.WriteLine("\n\n\n\n\n\nPress any key to go.....");
             Console.ReadLine();
             Console.Clear();
-            // >>>>>>>>>>>>>>>>Go to profile page<<<<<<<<<<<<<<
-            loginPage.Login();
+            // >>>>>>>>>>>>>>>>Go to home page<<<<<<<<<<<<<<
+            homePage.mainMenu();
         }
 
         private static bool IsValidEmail(string email)
@@ -69,7 +72,6 @@ namespace cSharp_BankSystemUsingSQLServer
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-
                     string insertSql = "INSERT INTO Users (user_Name, Email, Password) VALUES (@Name, @Email, @Password)";
                     using (SqlCommand command = new SqlCommand(insertSql, connection))
                     {
@@ -80,6 +82,7 @@ namespace cSharp_BankSystemUsingSQLServer
                         command.ExecuteNonQuery();
 
                     }
+                    connection.Close();
                 }
             }
             catch(Exception e)

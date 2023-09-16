@@ -10,11 +10,20 @@ namespace cSharp_BankSystemUsingSQLServer
 {
     internal class LoginPage
     {
-        //ProfilePage profilePage = new ProfilePage();
+        private List<Account> userAccounts;
         private static string connectionString = "Data Source=(local);Initial Catalog=BankSystem; Integrated Security=true";
-
-        public void Login()
+        public LoginPage(List<Account> userAccounts)
         {
+            this.userAccounts = userAccounts; // Initialize userAccounts in the constructor
+        }
+
+        public LoginPage()
+        {
+        }
+
+        public void Login(List<Account> userAccounts)
+        {
+            ProfilePage profilePage = new ProfilePage();
             // Prompt the user for email and password
             Console.Write("Enter your email: ");
             string email = Console.ReadLine();
@@ -25,18 +34,17 @@ namespace cSharp_BankSystemUsingSQLServer
             // Authenticate the user
             User authenticatedUser = AuthenticateUser(email, password);
 
-            if (authenticatedUser != null)
+            if (authenticatedUser == null)
+            {
+                Console.WriteLine("Invalid email or password. Please try again.");
+            }
+            else
             {
                 // User is authenticated; grant access to the program
                 Console.WriteLine("Login successful! Welcome, " + authenticatedUser.Name);
                 loading();
                 Console.Clear();
-                ProfilePage profilePage = new ProfilePage();
-                profilePage.profileMenu(authenticatedUser);
-            }
-            else
-            {
-                Console.WriteLine("Invalid email or password. Please try again.");
+                profilePage.profileMenu(authenticatedUser, userAccounts);
             }
         }
         private static User AuthenticateUser(string email, string password)
@@ -79,6 +87,7 @@ namespace cSharp_BankSystemUsingSQLServer
                         }
                     }
                 }
+                connection.Close();
             }
 
             // No matching user or incorrect password; return null
@@ -110,11 +119,12 @@ namespace cSharp_BankSystemUsingSQLServer
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public List<Account> Accounts { get; set; }
+        public List<Account> userAccount { get; set; }
         public User()
         {
-            Accounts = new List<Account>();
+            userAccount = new List<Account>();
         }
+        
     }
 
 
