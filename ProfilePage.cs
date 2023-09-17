@@ -73,7 +73,8 @@ namespace cSharp_BankSystemUsingSQLServer
                         transaction.transactionMenu(userAccounts, authenticatedUser);
                         break;
                     case "3":
-                        transaction.history(userAccounts, authenticatedUser);
+                        Console.Clear();
+                        ViewTransactionHistoryMenu(authenticatedUser);
                         break;
                     case "4":
                         Console.Clear();
@@ -84,6 +85,7 @@ namespace cSharp_BankSystemUsingSQLServer
                         deleteUser(authenticatedUser);
                         break;
                     case "6":
+                        authenticatedUser = null;
                         Console.Clear();
                         homePage.mainMenu();
                         break;
@@ -103,15 +105,17 @@ namespace cSharp_BankSystemUsingSQLServer
                 int UserID = authenticatedUser.UserId;
                 string AccountHolderName = authenticatedUser.Name;
                 insertAccount(balance, UserID, AccountHolderName);
-                Console.WriteLine("\n\n\n\n\n\nPress any key to go back.....");
-                Console.ReadLine();
-                profileMenu(authenticatedUser, userAccounts);                
+                               
             }
             else
             {
                 Console.WriteLine("Invalid initial balance.");
                 return;
             }
+            Console.WriteLine("Press Enter to go back...");
+            Console.ReadLine();
+            Console.Clear();
+            profileMenu(authenticatedUser, userAccounts);
 
         }
         private static void insertAccount(decimal balance, int UserID, string AccountHolderName)
@@ -294,7 +298,54 @@ namespace cSharp_BankSystemUsingSQLServer
         {
             return BCrypt.Net.BCrypt.Verify(inputPassword, hashedPassword);
         }
-
+        private void ViewTransactionHistoryMenu(User authenticatedUser)
+        {
+            Transaction transaction = new Transaction();
+            Console.WriteLine("View Transaction History:\n\n");
+            Console.WriteLine("1) Last transaction");
+            Console.WriteLine("2) Last day");
+            Console.WriteLine("3) Last 5 days");
+            Console.WriteLine("4) Last 1 month");
+            Console.WriteLine("5) Last 2 months");
+            Console.WriteLine("\n\n\n If you want more than one month please contact or visit the nearest branch");
+            Console.ResetColor();
+            Console.WriteLine("6) Back to Menu");
+            Console.ResetColor();
+            Console.WriteLine("Enter an option: ");
+            if (int.TryParse(Console.ReadLine(), out int choice))
+            {
+                string period;
+                switch (choice)
+                {
+                    case 1:
+                        period = "last transaction";
+                        break;
+                    case 2:
+                        period = "last day";
+                        break;
+                    case 3:
+                        period = "last 5 days";
+                        break;
+                    case 4:
+                        period = "last 1 month";
+                        break;
+                    case 5:
+                        period = "last 2 months";
+                        break;
+                    case 6:
+                        Console.Clear();
+                        return; // Exit the method
+                    default:
+                        period = "Enter a valid option";
+                        break;
+                }
+                transaction.ViewTransactionHistory(authenticatedUser, period);
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+            }
+        }
 
     }
 }
