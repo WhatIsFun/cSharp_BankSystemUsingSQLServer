@@ -301,14 +301,20 @@ namespace cSharp_BankSystemUsingSQLServer
         private void ViewTransactionHistoryMenu(User authenticatedUser)
         {
             Transaction transaction = new Transaction();
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("View Transaction History:\n\n");
+            Console.ResetColor();
+            Console.ForegroundColor= ConsoleColor.White;
             Console.WriteLine("1) Last transaction");
             Console.WriteLine("2) Last day");
             Console.WriteLine("3) Last 5 days");
             Console.WriteLine("4) Last 1 month");
             Console.WriteLine("5) Last 2 months");
-            Console.WriteLine("\n\n\n If you want more than one month please contact or visit the nearest branch");
             Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\n\n\nIf you want more than one month please contact or visit the nearest branch");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("6) Back to Menu");
             Console.ResetColor();
             Console.WriteLine("Enter an option: ");

@@ -25,11 +25,15 @@ namespace cSharp_BankSystemUsingSQLServer
  
             while (true)
             {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("1. Register");
                 Console.WriteLine("2. Login");
                 Console.WriteLine("3. View current exchange rates");
                 Console.WriteLine("4. Currency converter");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("5. Exit");
+                Console.ResetColor();
                 Console.Write("Select an option: ");
                 string choice = Console.ReadLine();
 
