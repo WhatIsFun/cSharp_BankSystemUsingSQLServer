@@ -64,6 +64,7 @@ namespace cSharp_BankSystemUsingSQLServer
                         }
                         else
                         {
+                            Console.Clear();
                             mainMenu();
                         }
                         break;

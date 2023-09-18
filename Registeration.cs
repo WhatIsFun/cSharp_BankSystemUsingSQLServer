@@ -27,12 +27,16 @@ namespace cSharp_BankSystemUsingSQLServer
             if (!IsValidEmail(email))
             {
                 Console.WriteLine("Invalid email address.");
+                Console.WriteLine("\n\n\n\n\n\nPress any key to go.....");
+                Console.ReadLine();
                 return;
             }
 
             if (!IsValidPassword(password))
             {
-                Console.WriteLine("Invalid password. Password must meet certain requirements.");
+                Console.WriteLine("Invalid password. Password must meet certain requirements.\nUppercase and Lowercase Letters\nDigits\nSpecial Characters (Minimum Length 8)");
+                Console.WriteLine("\n\n\n\n\n\nPress any key to go.....");
+                Console.ReadLine();
                 return;
             }
 

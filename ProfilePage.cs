@@ -312,7 +312,7 @@ namespace cSharp_BankSystemUsingSQLServer
             Console.WriteLine("5) Last 2 months");
             Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\n\n\nIf you want more than one month please contact or visit the nearest branch");
+            Console.WriteLine("\n\n\n* If you want more than one month please contact or visit the nearest branch");
             Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("6) Back to Menu");
@@ -324,18 +324,23 @@ namespace cSharp_BankSystemUsingSQLServer
                 switch (choice)
                 {
                     case 1:
+                        Console.Clear();
                         period = "last transaction";
                         break;
                     case 2:
+                        Console.Clear();
                         period = "last day";
                         break;
                     case 3:
+                        Console.Clear();
                         period = "last 5 days";
                         break;
                     case 4:
+                        Console.Clear();
                         period = "last 1 month";
                         break;
                     case 5:
+                        Console.Clear();
                         period = "last 2 months";
                         break;
                     case 6:

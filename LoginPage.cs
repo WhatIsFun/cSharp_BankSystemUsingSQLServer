@@ -37,6 +37,9 @@ namespace cSharp_BankSystemUsingSQLServer
             if (authenticatedUser == null)
             {
                 Console.WriteLine("Invalid email or password. Please try again.");
+                Console.WriteLine("\n\n\n\n\n\nPress any key to try again.....");
+                Console.ReadLine();
+                return;
             }
             else
             {

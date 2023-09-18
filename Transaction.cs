@@ -339,7 +339,7 @@ namespace cSharp_BankSystemUsingSQLServer
                         int rowsAffected = insertTransactionCommand.ExecuteNonQuery();
                         if (rowsAffected > 0)
                         {
-                            Console.WriteLine("Transaction recorded successfully.");
+                            Console.WriteLine("Transaction recorded successfully.");    
                         }
                         else
                         {
@@ -385,13 +385,11 @@ namespace cSharp_BankSystemUsingSQLServer
                 try
                 {
                     sqlConnection.Open();
-                    // Define the SQL SELECT query to fetch transaction history for the user's accounts within the specified period
                     string selectQuery = "SELECT Transaction_Id, Timestamp, Type, Amount, SourceAccountId, TargetAccountId FROM dbo.Transactions " +
                         "WHERE (SourceAccountId IN (SELECT Account_Id FROM dbo.Account WHERE User_ID = @userId) " +
                         "OR TargetAccountId IN (SELECT Account_Id FROM dbo.Account WHERE User_ID = @userId)) " +
                         "AND Timestamp >= @startDate " +
                         "ORDER BY Timestamp DESC";
-                    // Create and configure SqlCommand with parameters
                     using (SqlCommand sqlCommand = new SqlCommand(selectQuery, sqlConnection))
                     {
                         sqlCommand.Parameters.AddWithValue("@userId", authenticatedUser.UserId);
@@ -420,12 +418,15 @@ namespace cSharp_BankSystemUsingSQLServer
                                 }
                                 Console.WriteLine("Press any key to continue...");
                                 Console.ReadKey();
+                                Console.Clear();
+                                return;
                             }
                             else
                             {
                                 Console.WriteLine("No transaction history found.");
                                 Console.WriteLine("Press any key to continue...");
                                 Console.ReadKey();
+                                return;
                             }
                         }
                     }
@@ -435,6 +436,7 @@ namespace cSharp_BankSystemUsingSQLServer
                     Console.WriteLine("An error occurred: " + e.Message);
                     Console.WriteLine("Press any key to continue...");
                     Console.ReadKey();
+                    return;
                 }
             }
         }
